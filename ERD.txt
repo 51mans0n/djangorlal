@@ -1,0 +1,26 @@
+User (django.contrib.auth.User)
+ ├─< Address (commerces) [user_id FK -> User]
+ │
+ ├─< Order (commerces) [user_id FK -> User, restaurant_id FK -> Restaurant, address_id FK -> Address]
+ │     - status ∈ {new, confirmed, delivering, done}
+ │     - subtotal, discount_total, total ≥ 0
+ │
+ │    ├─< OrderItem (commerces) [order_id FK -> Order]
+ │    │     - item_name (snapshot), unit_price, qty ≥ 0, line_total ≥ 0
+ │    │
+ │    │    └─< OrderItemOption (commerces) [order_item_id FK -> OrderItem]
+ │    │          - option_name (snapshot), price_delta (может быть 0/≥0)
+ │    │
+ │    └─ M─N PromoCode (commerces) через OrderPromo
+ │          - PromoCode.code UNIQUE
+ │          - OrderPromo(applied_amount ≥ 0) и UNIQUE(order, promo)
+ │
+Restaurant (catalogs)
+ └─< MenuItem (catalogs) [restaurant_id FK -> Restaurant]
+       - base_price ≥ 0, is_available bool
+
+MenuItem M─N Category через ItemCategory
+ - ItemCategory UNIQUE(menu_item, category), position ≥ 0
+
+MenuItem M─N Option через ItemOption
+ - ItemOption UNIQUE(menu_item, option), price_delta ≥ 0, is_default bool
