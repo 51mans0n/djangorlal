@@ -1,3 +1,5 @@
+from apps.abstracts.models import AbstractSoftDeletableModel
+from apps.abstracts.models import AbstractSoftDeletableModel
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
@@ -5,7 +7,7 @@ from apps.catalogs.models import Restaurant, MenuItem
 
 User = settings.AUTH_USER_MODEL
 
-class Address(models.Model):
+class Address(AbstractSoftDeletableModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
     label = models.CharField(max_length=100, blank=True)  # например, "Дом", "Офис"
     line1 = models.CharField(max_length=200)
@@ -20,7 +22,7 @@ class Address(models.Model):
         return f"{self.user} — {self.label or self.line1}"
 
 
-class PromoCode(models.Model):
+class PromoCode(AbstractSoftDeletableModel):
     code = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=200, blank=True)
     is_active = models.BooleanField(default=True)
@@ -32,7 +34,7 @@ class PromoCode(models.Model):
         return self.code
 
 
-class Order(models.Model):
+class Order(AbstractSoftDeletableModel):
     class Status(models.TextChoices):
         NEW = "new", "New"
         CONFIRMED = "confirmed", "Confirmed"
@@ -60,7 +62,7 @@ class Order(models.Model):
         return f"Order #{self.pk} — {self.user} — {self.restaurant}"
 
 
-class OrderItem(models.Model):
+class OrderItem(AbstractSoftDeletableModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     menu_item = models.ForeignKey(MenuItem, on_delete=models.PROTECT, related_name="order_items")
 
@@ -78,7 +80,7 @@ class OrderItem(models.Model):
         return f"{self.item_name} x{self.qty} (order {self.order_id})"
 
 
-class OrderItemOption(models.Model):
+class OrderItemOption(AbstractSoftDeletableModel):
     order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE, related_name="selected_options")
     option_name = models.CharField(max_length=120)
     price_delta = models.DecimalField(max_digits=12, decimal_places=2, default=0, validators=[MinValueValidator(0)])
@@ -90,7 +92,7 @@ class OrderItemOption(models.Model):
         return f"{self.option_name} (+{self.price_delta})"
 
 
-class OrderPromo(models.Model):
+class OrderPromo(AbstractSoftDeletableModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     promo = models.ForeignKey(PromoCode, on_delete=models.PROTECT)
     applied_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, validators=[MinValueValidator(0)])

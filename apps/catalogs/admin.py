@@ -30,3 +30,5 @@ class MenuItemAdmin(admin.ModelAdmin):
     list_filter = ("restaurant", "is_available")
     search_fields = ("title", "restaurant__name")
     inlines = [ItemCategoryInline, ItemOptionInline]
+
+

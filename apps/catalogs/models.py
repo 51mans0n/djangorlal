@@ -1,7 +1,9 @@
+from apps.abstracts.models import AbstractSoftDeletableModel
 from django.db import models
+from apps.abstracts.models import AbstractSoftDeletableModel
 from django.core.validators import MinValueValidator
 
-class Restaurant(models.Model):
+class Restaurant(AbstractSoftDeletableModel):
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
@@ -13,7 +15,7 @@ class Restaurant(models.Model):
         return self.name
 
 
-class Category(models.Model):
+class Category(AbstractSoftDeletableModel):
     title = models.CharField(max_length=120, unique=True)
 
     class Meta:
@@ -23,7 +25,7 @@ class Category(models.Model):
         return self.title
 
 
-class Option(models.Model):
+class Option(AbstractSoftDeletableModel):
     name = models.CharField(max_length=120)
 
     class Meta:
@@ -34,7 +36,7 @@ class Option(models.Model):
         return self.name
 
 
-class MenuItem(models.Model):
+class MenuItem(AbstractSoftDeletableModel):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="items")
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -62,7 +64,7 @@ class MenuItem(models.Model):
         return f"{self.title} ({self.restaurant})"
 
 
-class ItemCategory(models.Model):
+class ItemCategory(AbstractSoftDeletableModel):
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     position = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
@@ -75,7 +77,7 @@ class ItemCategory(models.Model):
         return f"{self.menu_item} in {self.category} #{self.position}"
 
 
-class ItemOption(models.Model):
+class ItemOption(AbstractSoftDeletableModel):
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     option = models.ForeignKey(Option, on_delete=models.CASCADE)
     price_delta = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)])
