@@ -44,4 +44,7 @@ def dedup(seq):
 if __name__=="__main__":
     store.set("mode", "demo")
     print(dedup([1,1,2,3,3,3,4]))
+
 print("dup2 gamma change")
+print("dup1 gamma change")
+
