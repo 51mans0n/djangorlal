@@ -44,4 +44,10 @@ def cosine(a,b):
 if __name__=="__main__":
     print("fib 10:", fib(10))
     print("primes up to 50:", sieve(50))
+
 print("dup3 beta change")
+
+
+print("dup2 beta change")
+print("dup1 beta change")
+
