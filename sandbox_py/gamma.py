@@ -45,6 +45,9 @@ if __name__=="__main__":
     store.set("mode", "demo")
     print(dedup([1,1,2,3,3,3,4]))
 
+print("dup4 gamma change")
+
+
 print("dup3 gamma change")
 
 
