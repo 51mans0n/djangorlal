@@ -55,4 +55,16 @@ def histogram(seq, bins=10):
 if __name__ == "__main__":
     pts=[(0,0),(1,0),(1,1),(0,1)]
     print("perimeter:", polygon_perimeter(pts))
+
 print("dup5 alpha change")
+
+
+print("dup4 alpha change")
+
+
+print("dup3 alpha change")
+
+
+print("dup2 alpha change")
+print("dup1 alpha change")
+
