@@ -16,7 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from apps.education.views import CourseViewSet, LessonViewSet
+
+router = DefaultRouter()
+router.register("courses", CourseViewSet, basename="course")
+router.register("lessons", LessonViewSet, basename="lesson")
 
 urlpatterns = [
-	path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
+
+    # JWT
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+
+    # Education API
+    path("api/v1/education/", include(router.urls)),
 ]
